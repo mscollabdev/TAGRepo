@@ -1,0 +1,48 @@
+﻿.col-sm-8-spacing {
+    padding-left: 70px !important;
+}
+
+.inner-container {
+    background-color: #e9ecef;
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+    background-color: #e9ecef;
+    border-radius: .3rem;
+    height: 500px;
+}
+
+@media (min-width: 576px) .inner-container {
+    padding: 4rem 2rem;
+}
+
+.jumbotron1 {
+    padding: 1.5rem 1rem;
+    margin-bottom: 1rem;
+    background-color: #e9ecef;
+    border-radius: .3rem
+}
+
+@media (min-width:576px) {
+    .jumbotron {
+        padding: 3rem 1rem
+    }
+}
+
+.radio-button-container {
+    border: 1px solid #c7c4ca;
+    padding-left: 16px;
+}
+
+fieldset.border {
+    border: 1px solid #c4c8cc !important;
+}
+
+fieldset.p-3 {
+    padding: 0.5rem !important;
+}
+
+legend.w-auto {
+    font-size: 1.2rem !important;
+    margin-bottom: 0rem !important;
+    width: auto;
+}

@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.0/js/msal.min.js"></script>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sample For Browser</title>
+    <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.0/js/msal.js"></script>
+    <script type="text/javascript" src="~/js/graph-js-sdk.js"></script>
+    <script type="text/javascript" src="~/js/request.js"></script>
+    <script type="text/javascript" src="~/js/ui.js"></script>
+    <script type="text/javascript" src="~/js/Teams.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/main.css" />
+</head>
+
+<body style="background: #f3f3f3;">
+    <div class="container">
+        <div class="jumbotron1">
+            <div class="row">
+                <div class="col-sm-2">
+                    <img id="imgUserProfile" src="~/images/user.png" class="img-circle float-left img-responsive" alt="..." width="180" height="180" />
+                </div>
+                <div class="col-sm-8 col-sm-8-spacing">
+                    <h6>Name : <span id="sName"></span></h6>
+                    <h6>Email ID : <span id="sEmail"></span></h6>
+                    <h6>Job Title : <span id="sJob"></span></h6>
+                    <h6>Contact : <span id="sContact"></span></h6>
+                </div>
+            </div>
+        </div>
+        <div class="inner-container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <!-- Radio Buttons -->
+                    <div>
+                        <fieldset class="border p-3">
+                            <legend class="w-auto">Sort:</legend>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1">
+                                <label class="form-check-label">Alphabetically</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
+                                <label class="form-check-label">Usage</label>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="3">
+                                <label class="form-check-label">Group</label>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="container">
+                        <div class="example">
+                            <select id="boot-multiselect-demo" multiple="multiple">                                
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-7">
+                    <h3>Column 2</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
