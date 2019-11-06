@@ -2,22 +2,18 @@
     ViewData["Title"] = "Home Page";
 }
 
-<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-<script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.0/js/msal.min.js"></script>
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>Sample For Browser</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.0/js/msal.js"></script>
     <script type="text/javascript" src="~/js/graph-js-sdk.js"></script>
-    <script type="text/javascript" src="~/js/request.js"></script>
-    <script type="text/javascript" src="~/js/ui.js"></script>
+    <link href="~/css/jquery.multiselect.css" rel="stylesheet" />
+    <script src="~/js/jquery.multiselect.js"></script>
     <script type="text/javascript" src="~/js/Teams.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" />
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>   
     <link rel="stylesheet" type="text/css" href="~/css/main.css" />
 </head>
 
@@ -44,34 +40,54 @@
                         <fieldset class="border p-3">
                             <legend class="w-auto">Sort:</legend>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1">
-                                <label class="form-check-label">Alphabetically</label>
+                                <input class="form-check-input" type="radio" checked="checked" name="inlineRadioOptions" id="inlineRadio1" value="1">
+                                <label class="form-check-label">Owners</label>
                             </div>
 
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
-                                <label class="form-check-label">Usage</label>
-                            </div>
-
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="3">
-                                <label class="form-check-label">Group</label>
+                                <label class="form-check-label">Members</label>
                             </div>
                         </fieldset>
                     </div>
+                    <br />
+                    <br />
                     <div class="container">
-                        <div class="example">
-                            <select id="boot-multiselect-demo" multiple="multiple">                                
-                            </select>
-                        </div>
+                        <div id="dTOwners"></div>
+                        <div id="dTMembers" style="display:none"></div>
                     </div>
                 </div>
                 <div class="col-sm-7">
-                    <h3>Column 2</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
-                </div>
-            </div>
+                    <div id="no-data">
+                        No Team(s) selected
+                    </div>
+                    <div class="inner-container" id="divTeamTabDetails" style="display:none">
+                        <ul class="tabs">
+                            <li class="tab-link current" data-tab="tab-1" id="li-tab-1" >Details</li>
+                            <li class="tab-link" data-tab="tab-2" id="li-tab-2" >Bulk Action</li>
+                        </ul>
+                        <div id="tab-1" class="tab-content current" >
+                            <div id="tab-1-inner" style="display:none">Multiple teams selected.</div>
+                            <div id="tab-2-inner">
+                                <h6>Team Name : <span id="tName"></span></h6>
+                                <h6>Team Description : <span id="tDesc"></span></h6>
+                                <h6>Team Link : <span id="tLink"></span></h6>
+                                <h6>No of Channel : <span id="tChannels"></span></h6>
+                                <h6>No of Owners : <span id="tOwners"></span></h6>
+                                <h6>No of Members &amp; Guests : <span id="tMembers"></span></h6>
+                                <h6>Is Archived : <span id="tArchive"></span></h6>
+                                <h6>No of Apps : <span id="tApps"></span></h6>
+                            </div>
+                        </div>
+                        <div id="tab-2" class="tab-content">
+                            <button id="addUserbtn" type="button" class="btn btn-primary">Add User</button><br>
+                            <br>
+                            <button id="archivebtn" type="button" class="btn btn-primary">Archive</button><br>
+                            <br>
+                            <button id="createTeamsbtn" type="button" class="btn btn-primary">Create Teams</button><br>
+                            <br>
+                        </div>
+                    </div>
         </div>
     </div>
 </body>
