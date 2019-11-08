@@ -19,87 +19,103 @@
 
 <body style="background: #f3f3f3;">
     <div class="container">
-        <div class="jumbotron1">
-            <div class="row">
-                <div class="col-sm-2">
-                    <img id="imgUserProfile" src="~/images/user.png" class="img-circle float-left img-responsive" alt="..." width="180" height="180" />
-                </div>
-                <div class="col-sm-8 col-sm-8-spacing">
-                    <h6>Name : <span id="sName"></span></h6>
-                    <h6>Email ID : <span id="sEmail"></span></h6>
-                    <h6>Job Title : <span id="sJob"></span></h6>
-                    <h6>Contact : <span id="sContact"></span></h6>
-                    <h6>Total Teams : <span id="sTeams"></span></h6>
-                    <h6>As Team Owner : <span id="sTOwner"></span></h6>
-                    <h6>As Team Member : <span id="sTMember"></span></h6>
-                </div>
+        <div class="row">
+            <img src="~/images/banner.png" id="imgBanner" />
+            <img id="imgUserProfile" class="img-circle float-left img-responsive" src="/images/user.png">
+            <h2 id="uName"><span id="sName"></span></h2>
+            <h5 id="JTitle"><span id="sJob"></span></h5>
+            <div id="uContacts">
+                <img src="/images/user.png" width="15" height="15" /><span id="sEmail"></span>
+                <br>
+                <img src="/images/user.png" width="15" height="15" /><span id="sContact"></span>
+            </div>
+            <div class="teamDetails" style="left: 49rem;">
+                <h1 style="margin-bottom: 0.1rem;text-align: center;">
+                    <span id="sTeams"></span>
+                </h1>
+                <h5>Total Teams</h5>
+            </div>
+            <div class="teamDetails" style="left: 58rem;">
+                <h1 style="margin-bottom: 0.1rem;text-align: center;">
+                    <span id="sTOwner"></span>
+                </h1>
+                <h5>As Owners</h5>
+            </div>
+            <div class="teamDetails" style="left: 66rem;">
+                <h1 style="margin-bottom: 0.1rem;text-align: center;">
+                    <span id="sTMember"></span>
+                </h1>
+                <h5>As Members</h5>
             </div>
         </div>
-        <div class="inner-container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <!-- Radio Buttons -->
-                    <div>
-                        <fieldset class="border p-3">
-                            <legend class="w-auto">Sort:</legend>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" checked="checked" name="inlineRadioOptions" id="inlineRadio1" value="1">
-                                <label class="form-check-label">Owners</label>
-                            </div>
+    </div>
+    <div class="inner-container">
+        <div class="row">
+            <div class="col-sm-4">
+                <!-- Radio Buttons -->
+                <div>
+                    <fieldset class="border p-3">
+                        <legend class="w-auto">Sort:</legend>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" checked="checked" name="inlineRadioOptions" id="inlineRadio1" value="1">
+                            <label class="form-check-label">Owners</label>
+                        </div>
 
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
-                                <label class="form-check-label">Members</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input type="button" id="btnLoad" value="Load Users" />
-                            </div>
-                        </fieldset>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
+                            <label class="form-check-label">Members</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input type="button" id="btnLoad" value="Load Users" />
+                        </div>
+                    </fieldset>
+                </div>
+                <br />
+                <br />
+                <div class="container">
+                    <div id="dTOwners"></div>
+                    <div id="dTMembers" style="display:none"></div>
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <div id="no-data">
+                    No Team(s) selected
+                </div>
+                <div class="inner-container" id="divTeamTabDetails" style="display:none">
+                    <ul class="tabs">
+                        <li class="tab-link current" data-tab="tab-1" id="li-tab-1">Details</li>
+                        <li class="tab-link" data-tab="tab-2" id="li-tab-2">Bulk Action</li>
+                    </ul>
+                    <div id="tab-1" class="tab-content current">
+                        <div id="tab-1-inner" style="display:none">Multiple teams selected.</div>
+                        <div id="tab-2-inner">
+                            <h6>Team Name : <span id="tName"></span></h6>
+                            <h6>Team Link : <span id="tLink"></span></h6>
+                            <h6>No of Apps (OOTB) : <span id="tAppsOOTB"></span></h6>
+                            <h6>No of Apps Installed (Custom) : <span id="tAppsCustom"></span></h6>
+                            <h6>No of Channels : <span id="tChannels"></span></h6>
+                            <h6>Most Active Channel : <span id="tMActiveChannel">General</span></h6>
+                            <h6>Least Active Channel : <span id="tLActiveChannel">Temporary Channel</span></h6>
+                            <h6>Report Refresh Date (yyyy-mm-dd) : <span id="reportDate"></span></h6>
+                            <h6>Team - Last Activity Date (yyyy-mm-dd) : <span id="tLastActivityDate"></span></h6>
+                        </div>
                     </div>
-                    <br />
-                    <br />
-                    <div class="container">
-                        <div id="dTOwners"></div>
-                        <div id="dTMembers" style="display:none"></div>
+                    <div id="tab-2" class="tab-content">
+                        <button id="addUserbtn" type="button" class="btn btn-primary">Add User</button>
+                        <input type="text" width="350" id="txtUser" placeholder="Please enter user email id" style="width:300px;margin-left:20px" /><br /><br />
+                        <button id="archivebtn" type="button" class="btn btn-primary">Archive</button><br />
+                        <br />
+                        <button id="createTeamsbtn" type="button" class="btn btn-primary">Create Teams</button><br />
+                        <br />
+                        <button id="leaveTeamsbtn" type="button" class="btn btn-primary">Leave Teams</button><br />
+                        <br />
+                        <br />
+                        <label id="lblMessage"></label>
                     </div>
                 </div>
-                <div class="col-sm-7">
-                    <div id="no-data">
-                        No Team(s) selected
-                    </div>
-                    <div class="inner-container" id="divTeamTabDetails" style="display:none">
-                        <ul class="tabs">
-                            <li class="tab-link current" data-tab="tab-1" id="li-tab-1" >Details</li>
-                            <li class="tab-link" data-tab="tab-2" id="li-tab-2" >Bulk Action</li>
-                        </ul>
-                        <div id="tab-1" class="tab-content current" >
-                            <div id="tab-1-inner" style="display:none">Multiple teams selected.</div>
-                            <div id="tab-2-inner">
-                                <h6>Team Name : <span id="tName"></span></h6>
-                                <h6>Team Link : <span id="tLink"></span></h6>
-                                <h6>No of Apps (OOTB) : <span id="tAppsOOTB"></span></h6>
-                                <h6>No of Apps Installed (Custom) : <span id="tAppsCustom"></span></h6>
-                                <h6>No of Channels : <span id="tChannels"></span></h6>
-                                <h6>Most Active Channel : <span id="tMActiveChannel">General</span></h6>
-                                <h6>Least Active Channel : <span id="tLActiveChannel">Temporary Channel</span></h6>
-                                <h6>Report Refresh Date (yyyy-mm-dd) : <span id="reportDate"></span></h6>
-                                <h6>Team - Last Activity Date (yyyy-mm-dd) : <span id="tLastActivityDate"></span></h6>
-                            </div>
-                        </div>
-                        <div id="tab-2" class="tab-content">
-                                <button id="addUserbtn" type="button" class="btn btn-primary">Add User</button>
-                                <input type="text" width="350" id="txtUser" placeholder="Please enter user email id" style="width:300px;margin-left:20px"/><br /><br />
-                                <button id="archivebtn" type="button" class="btn btn-primary">Archive</button><br />
-                                <br />
-                                <button id="createTeamsbtn" type="button" class="btn btn-primary">Create Teams</button><br />
-                                <br />      
-                                <br />
-                                <label id="lblMessage"></label>
-                        </div>
-                    </div>      
-                </div>   
             </div>
         </div>
+    </div>
     </div>
 </body>
 </html>

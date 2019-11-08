@@ -11,6 +11,7 @@ var allCustomApps = [];
 var teamCustomApps = [];
 var allGroupsReport = [];
 var allUsers = [];
+var UserID = "";
 
 
 
@@ -156,6 +157,22 @@ $(document).ready(function () {
         });        
     });
 
+    $("#leaveTeamsbtn").click(function () {
+        console.log(UserID);
+        $("[id*='opt']:checked").each(function () {
+            var groupId = $(this).val();
+            request.
+                removeUser(UserID,groupId)
+                .then((res11) => {
+                    $("#lblMessage").text("User removed successfully! Please click 'Load Teams' again.");
+                })
+                .catch((error) => {
+                    $("#lblMessage").text(error);
+                    console.log(error);
+                });
+        });
+    });
+
               
 });
 
@@ -173,6 +190,7 @@ let client6;
 let client7;
 let client8;
 let client9;
+let client10;
 
 let request = {
     getUserDetails: async () => {
@@ -266,16 +284,24 @@ let request = {
 
     addUser: async (tID) => {
         try {                          
-
             var directoryObject = {};
             directoryObject["@odata.id"] = "https://graph.microsoft.com/beta/directoryObjects/9fd6a31b-5490-42cb-a669-57b1530b5771";
         let res = await client9.api("https://graph.microsoft.com/beta/groups/" + tID + "/members/$ref").post(directoryObject);
         return res;
+            }
+        catch(error) {
+            throw error;
+        }
+    },
+
+    removeUser: async (uID, tID) => {
+        try {
+            let res = await client10.api("https://graph.microsoft.com/beta/groups/" + tID + "/members/" + uID + "/$ref").delete();
+            return res;
+        } catch (error) {
+            throw error;
+        }
     }
-    catch(error) {
-        throw error;
-    }
-}
 
     
 };
@@ -341,6 +367,10 @@ const init = async () => {
         debugLogging: true,
         authProvider: msalProvider
     });
+    client10 = MicrosoftGraph.Client.initWithMiddleware({
+        debugLogging: true,
+        authProvider: msalProvider
+    });
 
     request
         .getUserDetails()
@@ -350,6 +380,7 @@ const init = async () => {
             $("#sJob").text(res.jobTitle);
             $("#sContact").text(res.mobilePhone);
             email = res.mail;
+            UserID = res.id;
         })
         .catch((error) => {
             console.log(error);
