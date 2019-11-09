@@ -310,14 +310,14 @@ let request = {
 const init = async () => {
     
     const scopes = ["Group.ReadWrite.All"];
+    const CacheLocation = "localStorage";
     const msalConfig = {
         auth: {
-            clientId: "9a0a1545-40f3-4068-8058-2bf10b52fa18",
+            clientId: "2f625ade-9dc8-414f-a0ea-4efe97780e30",
             authority: "https://login.microsoftonline.com/common"
         },
         cache: {
-            cacheLocation: "localStorage",
-            storeAuthStateInCookie: true
+            cacheLocation: CacheLocation            
         }
     };
     
@@ -327,10 +327,14 @@ const init = async () => {
     var msalApplication = new Msal.UserAgentApplication(msalConfig);
     const msalOptions = new MicrosoftGraph.MSALAuthenticationProviderOptions(scopes);
     const msalProvider = new MicrosoftGraph.ImplicitMSALAuthenticationProvider(msalApplication, msalOptions);
+
+    
+
     client = MicrosoftGraph.Client.initWithMiddleware({
         debugLogging: true,
         authProvider: msalProvider
     });
+    console.log(client);
     client1 = MicrosoftGraph.Client.initWithMiddleware({
         debugLogging: true,
         authProvider: msalProvider
