@@ -7,7 +7,7 @@
 <head>
     <title>Sample For Browser</title>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://alcdn.msauth.net/lib-preview/1.2.0.0/js/msal.js"></script>    
+    <script src="https://alcdn.msauth.net/lib-preview/1.2.0.0/js/msal.js"></script>
     <script type="text/javascript" src="~/js/graph-js-sdk.js"></script>
     <link href="~/css/jquery.multiselect.css" rel="stylesheet" />
     <script src="~/js/jquery.multiselect.js"></script>
@@ -19,103 +19,122 @@
 
 <body style="background: #f3f3f3;">
     <div class="container">
-        <div class="row">
-            <img src="~/images/banner.png" id="imgBanner" />
+        <div class="row" style="background-image:url('/images/banner.png');height: 9rem; padding:3px; top:15%">
+            <!--img src="~/images/banner.png" id="imgBanner" /-->
             <img id="imgUserProfile" class="img-circle float-left img-responsive" src="/images/user.png">
-            <h2 id="uName"><span id="sName"></span></h2>
-            <h5 id="JTitle"><span id="sJob"></span></h5>
-            <div id="uContacts">
-                <img src="/images/user.png" width="15" height="15" /><span id="sEmail"></span>
-                <br>
-                <img src="/images/user.png" width="15" height="15" /><span id="sContact"></span>
-            </div>
-            <div class="teamDetails" style="left: 49rem;">
+            <fieldset id="userInfo-fieldset">
+                <h3 id="uName" style="color:white"><span id="sName"></span></h3>
+                <h5 id="JTitle" style="color:white"><span id="sJob"></span></h5>
+                <div id="uContacts" style="color:white">
+                    <img src="~/images/email.png" width="15" height="15" />&nbsp<span id="sEmail"></span>
+                    <br>
+                    <img src="~/images/phone.png" width="15" height="15" />&nbsp<span id="sContact"></span>
+                </div>
+            </fieldset>
+            <div class="teamDetails" style="left: 59%;">
                 <h1 style="margin-bottom: 0.1rem;text-align: center;">
                     <span id="sTeams"></span>
                 </h1>
                 <h5>Total Teams</h5>
             </div>
-            <div class="teamDetails" style="left: 58rem;">
+            <div class="teamDetails" style="left: 69%;">
                 <h1 style="margin-bottom: 0.1rem;text-align: center;">
                     <span id="sTOwner"></span>
                 </h1>
-                <h5>As Owners</h5>
+                <h5>As Owner</h5>
             </div>
-            <div class="teamDetails" style="left: 66rem;">
+            <div class="teamDetails" style="left: 78%;">
                 <h1 style="margin-bottom: 0.1rem;text-align: center;">
                     <span id="sTMember"></span>
                 </h1>
-                <h5>As Members</h5>
+                <h5>As Member</h5>
             </div>
         </div>
-    </div>
-    <div class="inner-container">
-        <div class="row">
-            <div class="col-sm-4">
-                <!-- Radio Buttons -->
-                <div>
-                    <fieldset class="border p-3">
-                        <legend class="w-auto">Sort:</legend>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" checked="checked" name="inlineRadioOptions" id="inlineRadio1" value="1">
-                            <label class="form-check-label">Owners</label>
-                        </div>
 
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
-                            <label class="form-check-label">Members</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input type="button" id="btnLoad" value="Load Users" />
-                        </div>
-                    </fieldset>
-                </div>
-                <br />
-                <br />
-                <div class="container">
-                    <div id="dTOwners"></div>
-                    <div id="dTMembers" style="display:none"></div>
+        <div class="row" style="background-image:url('/images/banner.png');height: 20.5rem; margin-top:8px">
+            <div class="col-sm-4" id="col-4">
+                <fieldset class="border p-3">
+                    <legend class="w-auto">User Type:</legend>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" checked="checked" name="inlineRadioOptions" id="inlineRadio1" value="1">
+                        <label class="form-check-label">Owner</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
+                        <label class="form-check-label">Member</label>
+                    </div>
+                </fieldset>
+                <div>
+                    <div id="dTOwners" style="margin:1px">
+                    </div>
+                    <div id="dTMembers" style="display:none">
+                    </div>
                 </div>
             </div>
-            <div class="col-sm-7">
+            <div class="col-sm-7" id="col-7">
                 <div id="no-data">
-                    No Team(s) selected
+                    No Team(s) selected..!!
                 </div>
-                <div class="inner-container" id="divTeamTabDetails" style="display:none">
+                <div id="divTeamTabDetails" style="display:none">
                     <ul class="tabs">
-                        <li class="tab-link current" data-tab="tab-1" id="li-tab-1">Details</li>
-                        <li class="tab-link" data-tab="tab-2" id="li-tab-2">Bulk Action</li>
+                        <li class="tab-link current" data-tab="tab-1" id="li-tab-1"><img src="~/images/details.png" style="vertical-align: middle;width: 30px;height: 25px;" /> Details</li>
+                        <li class="tab-link" data-tab="tab-2" id="li-tab-2"><img src="~/images/action.png" style="vertical-align: middle;width: 30px;height: 25px;" />Bulk Action</li>
                     </ul>
                     <div id="tab-1" class="tab-content current">
-                        <div id="tab-1-inner" style="display:none">Multiple teams selected.</div>
+                        <div id="tab-1-inner" style="display:none">Multiple teams selected..!!</div>
                         <div id="tab-2-inner">
-                            <h6>Team Name : <span id="tName"></span></h6>
-                            <h6>Team Link : <span id="tLink"></span></h6>
-                            <h6>No of Apps (OOTB) : <span id="tAppsOOTB"></span></h6>
-                            <h6>No of Apps Installed (Custom) : <span id="tAppsCustom"></span></h6>
-                            <h6>No of Channels : <span id="tChannels"></span></h6>
-                            <h6>Most Active Channel : <span id="tMActiveChannel">General</span></h6>
-                            <h6>Least Active Channel : <span id="tLActiveChannel">Temporary Channel</span></h6>
-                            <h6>Report Refresh Date (yyyy-mm-dd) : <span id="reportDate"></span></h6>
-                            <h6>Team - Last Activity Date (yyyy-mm-dd) : <span id="tLastActivityDate"></span></h6>
+                            <fieldset id="fieldset-TeamDetails" style="font-size:15px">
+                                <p><b>Team Name : </b><span id="tName"></span></p>
+                                <p><b>Team URL : </b><span id="tLink"></span></p>
+                                <p><b>No. of Apps (OOTB) : </b><span id="tAppsOOTB"></span></p>
+                                <p><b>No. of Apps Installed (Custom) : </b><span id="tAppsCustom"></span></p>
+                                <p><b>No. of Channels : </b><span id="tChannels"></span></p>
+                                <p>
+                                    <b>Most Active Channel : </b>
+                                    <span tooltip="This is calculated using channel last activity (chat history,file modifed and channel history)" id="tMActiveChannel">General <b>*</b></span>
+                                </p>
+                                <p>
+                                    <b>Least Active Channel : </b>
+                                    <span id="tLActiveChannel" tooltip="This is calculated using channel last activity (chat history,file modifed and channel history)">Temporary Channel <b>*</b></span>
+                                </p>
+                                <p><b>Report Refresh Date (yyyy-mm-dd) : </b><span id="reportDate"></span></p>
+                                <p><b>Last Activity Date (yyyy-mm-dd) : </b><span id="tLastActivityDate"></span></p>
+
+                            </fieldset>
                         </div>
                     </div>
                     <div id="tab-2" class="tab-content">
-                        <button id="addUserbtn" type="button" class="btn btn-primary">Add User</button>
-                        <input type="text" width="350" id="txtUser" placeholder="Please enter user email id" style="width:300px;margin-left:20px" /><br /><br />
-                        <button id="archivebtn" type="button" class="btn btn-primary">Archive</button><br />
-                        <br />
-                        <button id="createTeamsbtn" type="button" class="btn btn-primary">Create Teams</button><br />
-                        <br />
-                        <button id="leaveTeamsbtn" type="button" class="btn btn-primary">Leave Teams</button><br />
-                        <br />
-                        <br />
-                        <label id="lblMessage"></label>
+                        <fieldset id="button-owner" class="fieldset-button">
+                            <button id="addUserbtn" type="button" class="btn btn-primary">Add User</button>
+                            <input type="text" width="350" id="txtUser" placeholder="Please enter user email id" style="width:300px;margin-left:20px" />
+                            <label id="lblMessage" style="color : green"></label>
+                            <br>
+                            <br>
+                            <div>
+                                <button id="createTeamsbtn" type="button" class="btn btn-primary">Create Teams</button>
+                                <select id='ddlgroup' multiple name='dG'>
+                                    <option value="Group1"> Group 1</option>
+                                    <option value="Group2"> Group 2</option>
+                                </select>
+                            </div>
+                            <br>
+                            <button id="archivebtn" type="button" class="btn btn-primary syncFiles">Sync Files</button><br>
+                            <br>
+
+
+                        </fieldset>
+                        <fieldset id="button-member" class="fieldset-button" style="display:none">
+                            <button id="leaveTeamsbtn" type="button" class="btn btn-primary">Leave Teams</button><br />
+                            <label id="lblMessageMember" style="color : green"></label>
+                            <br>
+                            <button id="archivebtn1" type="button" class="btn btn-primary syncFiles">Sync Files</button><br>
+                            <br>
+                        </fieldset>
+
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </body>
 </html>

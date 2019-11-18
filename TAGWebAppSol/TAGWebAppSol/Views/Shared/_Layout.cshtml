@@ -3,28 +3,28 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TAG : Teams Administration &amp; Governance</title>   
+    <title>@ViewData["Title"] - TAG : Teams Administration &amp; Governance</title>
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TAG : Teams Administration &amp; Governance</a>                                
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">TAG : Teams Administration &amp; Governance</a>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div>
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; TAG &reg; 2019
-        </div>
-    </footer>  
+        @*<div class="container">
+                &copy; TAG &reg; 2019
+            </div>*@
+    </footer>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>

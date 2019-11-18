@@ -12,11 +12,19 @@ var teamCustomApps = [];
 var allGroupsReport = [];
 var allUsers = [];
 var UserID = "";
+var userEmail = "";
+var userDomain = "";
+var siteName = "";
+var siteID = "";
+var webID = "";
+var listID = "";
 
 
 
 $(document).ready(function () {
     init();
+    $("#ddlgroup").multiselect();
+
     setTimeout(function () {
         $("#ddlOwnerTeams").multiselect({
             search: true,
@@ -31,8 +39,10 @@ $(document).ready(function () {
         });
 
         $("[id*='opt']").click(function () {
+            $("#lblMessage").hide();
+            $("#lblMessageMember").hide();
+            $("#txtUser").val('');
             if ($("[id*='opt']:checked").length === 1) {
-                var cID = $(this).id;               
                 $("#divTeamTabDetails").show();
                 $("#no-data").hide();
                 $('#li-tab-2').removeClass('current');
@@ -60,44 +70,79 @@ $(document).ready(function () {
                     .getTeamsOwners($("[id*='opt']:checked")['0'].value, "test")
                     .then((res4) => {
                         $("#tOwners").text(res4.value.length);
-                    });   
+                    });
 
                 request
                     .getAppsDetails($("[id*='opt']:checked")['0'].value)
                     .then((res6) => {
                         for (var i = 0; i < res6.value.length; i++) {
                             var x = "'" + i + "'";
-                            x = x.replace(/['"]+/g, '');                            
+                            x = x.replace(/['"]+/g, '');
                             for (var j = 0; j < allCustomApps.length; j++) {
                                 if (allCustomApps[j] === res6.value[x].teamsAppDefinition.teamsAppId) {
-                                    teamCustomApps.push(res6.value[x].teamsAppDefinition.displayName);                                    
+                                    teamCustomApps.push(res6.value[x].teamsAppDefinition.displayName);
                                 }
                             }
                         }
                         $("#tAppsOOTB").text(res6.value.length - teamCustomApps.length);
                         $("#tAppsCustom").text(teamCustomApps.length);
-                    }); 
+                    });
 
-                $.each(allGroupsReport, function (index, value)   
-	                {                    	                   
-                    if (allGroupsReport[index].indexOf($("[id*='opt']:checked")['0'].value) > -1) {                                               
+                request
+                    .getGroupNickName($("[id*='opt']:checked")['0'].value)
+                    .then((res11) => {
+                        //siteURL = "https://" + userDomain + "/sites/" + res11.value['0'].mailNickname;
+                        siteName = res11.value['0'].mailNickname;
+                    });
+
+                request
+                    .getSiteWebID(userDomain, siteName)
+                    .then((res12) => {
+                        var siteDetails = res12.value['0'].id;
+                        siteID = siteDetails.split(',')[1];
+                        webID = siteDetails.split(',')[2];
+                    });
+
+
+                request
+                    .getSiteWebID(siteID)
+                    .then((res13) => {
+                        for (var i = 0; i < res13.value.length; i++) {
+                            var x = "'" + i + "'";
+                            x = x.replace(/['"]+/g, '');
+                            if (res6.value[x].name === "Shared Documents") {
+                                listID = res6.value[x].id;
+                            }
+                        }
+                    });
+
+
+                $.each(allGroupsReport, function (index, value) {
+                    if (allGroupsReport[index].indexOf($("[id*='opt']:checked")['0'].value) > -1) {
                         $("#reportDate").text(value.split('|')[1]);
                         $("#tLastActivityDate").text(value.split('|')[2]);
                     }
-	                });
+                });
 
             }
-            else if ($("[id*='opt']:checked").length === 0)
-            {
+            else if ($("[id*='opt']:checked").length === 0) {
                 $("#divTeamTabDetails").hide();
                 $("#no-data").show();
             }
             else {
+                if ($("input[name='inlineRadioOptions']:checked").val() === "1") {
+                    $('#button-owner').show();
+                    $('#button-member').hide();
+                }
+                else if ($("input[name='inlineRadioOptions']:checked").val() === "2") {
+                    $('#button-owner').hide();
+                    $('#button-member').show();
+                }
                 $("#no-data").hide();
                 $('#li-tab-2').addClass('current');
                 $("#tab-2").addClass('current');
                 $('#li-tab-1').removeClass('current');
-                $("#tab-1").removeClass('current');                               
+                $("#tab-1").removeClass('current');
             }
         });
 
@@ -105,45 +150,82 @@ $(document).ready(function () {
         $("#sTOwner").text($("#ddlOwnerTeams option").length);
         $("#sTMember").text($("#ddlMemberTeams option").length);
 
+        $(".ts-messages-header").css("display", "none");
+
     }, 1000);
 
     $('ul.tabs li').click(function () {
-        var tab_id = $(this).attr('data-tab');
-        console.log(tab_id);
+        var tab_id = $(this).attr('data-tab');       
         $('ul.tabs li').removeClass('current');
         $('.tab-content').removeClass('current');
+        $("#lblMessage").hide();
+        $("#lblMessageMember").hide();
+        $("#txtUser").val('');
 
         $(this).addClass('current');
         $("#" + tab_id).addClass('current');
 
         if (tab_id === "tab-1") {
-            if ($(".form-check-input").attr("value") === "1") {
-                $("#tab-1-inner").hide();
-                $("#tab-2-inner").show();
+            if ($("[id*='opt']:checked").length === 1) {
+                $("#divTeamTabDetails").show();
+                $('#tab-1-inner').hide();
+                $('#tab-2-inner').show();
+                $("#no-data").hide();
+            }
+            else if ($("[id*='opt']:checked").length === 0) {
+                $("#divTeamTabDetails").hide();
+                $('#tab-1-inner').hide();
+                $('#tab-2-inner').hide();
+                $("#no-data").show();
             }
             else {
-                $("#tab-1-inner").show();
-                $("#tab-2-inner").hide();
+                $("#divTeamTabDetails").show();
+                $('#tab-1-inner').show();
+                $('#tab-2-inner').hide();
+                $("#no-data").hide();
             }
+        }
+        else if (tab_id === "tab-2") {
+            if ($("input[name='inlineRadioOptions']:checked").val() === "1") {
+                $('#button-owner').show();
+                $('#button-member').hide();
+            }
+            else if ($("input[name='inlineRadioOptions']:checked").val() === "2") {
+                $('#button-owner').hide();
+                $('#button-member').show();
+            }
+
         }
     });
 
     $(".form-check-input").click(function () {
+        $("#lblMessage").hide();
+        $("#lblMessageMember").hide();
+        $("#txtUser").val('');
+        $("[id *= 'opt']").prop("checked", false);
+        /* $('.ms-options-wrap').find('> button:first-child').text('');*/
+
+        $("#divTeamTabDetails").hide();
+        $("#no-data").show();
+
+
         if ($(this).attr("value") === "1") {
             $("#dTOwners").show();
             $("#dTMembers").hide();
         }
-        if ($(this).attr("value") === "2") {
+        else if ($(this).attr("value") === "2") {
             $("#dTMembers").show();
             $("#dTOwners").hide();
         }
-    });  
+    });
 
     $("#btnLoad").click(function () {
         location.reload();
     });
 
     $("#addUserbtn").click(function () {
+        $("#lblMessage").show();
+        $("#lblMessageMember").hide();
         $("[id*='opt']:checked").each(function () {
             var groupId = $(this).val();
             request.
@@ -154,26 +236,35 @@ $(document).ready(function () {
                 .catch((error) => {
                     $("#lblMessage").text(error);
                 });
-        });        
+        });
     });
 
     $("#leaveTeamsbtn").click(function () {
-        console.log(UserID);
+        $("#lblMessage").hide();
+        $("#lblMessageMember").show();
+        $("#txtUser").val('');
         $("[id*='opt']:checked").each(function () {
             var groupId = $(this).val();
             request.
-                removeUser(UserID,groupId)
+                removeUser(UserID, groupId)
                 .then((res11) => {
-                    $("#lblMessage").text("User removed successfully! Please click 'Load Teams' again.");
+                    $("#lblMessageMember").text("User removed successfully! Please click 'Load Teams' again.");
                 })
                 .catch((error) => {
-                    $("#lblMessage").text(error);
+                    $("#lblMessageMember").text(error);
                     console.log(error);
                 });
         });
     });
 
-              
+    $(".syncFiles").click(function () {
+        window.open(
+            "odopen://sync/?siteId=" + siteID + "&amp;webId=" + webID + "&amp;listId=" + listID + "&amp;userEmail=" + userEmail + "&amp;webUrl=+%3A%2F%2F" + userDomain + "/sites/" + siteName,
+            "_blank" 
+        );
+    });
+
+
 });
 
 
@@ -191,6 +282,9 @@ let client7;
 let client8;
 let client9;
 let client10;
+let client11;
+let client12;
+let client13;
 
 let request = {
     getUserDetails: async () => {
@@ -280,16 +374,16 @@ let request = {
         }
     },
 
-   
+
 
     addUser: async (tID) => {
-        try {                          
+        try {
             var directoryObject = {};
             directoryObject["@odata.id"] = "https://graph.microsoft.com/beta/directoryObjects/9fd6a31b-5490-42cb-a669-57b1530b5771";
-        let res = await client9.api("https://graph.microsoft.com/beta/groups/" + tID + "/members/$ref").post(directoryObject);
-        return res;
-            }
-        catch(error) {
+            let res = await client9.api("https://graph.microsoft.com/beta/groups/" + tID + "/members/$ref").post(directoryObject);
+            return res;
+        }
+        catch (error) {
             throw error;
         }
     },
@@ -301,14 +395,41 @@ let request = {
         } catch (error) {
             throw error;
         }
+    },
+
+    getGroupNickName: async (tID) => {
+        try {
+            let res = await client11.api("https://graph.microsoft.com/beta/groups/" + tID + "?$select=mailNickname").get();
+            return res;
+        } catch(error) {
+            throw error;
+        }
+    },
+
+    getSiteWebID: async (userDomain, siteName) => {
+        try {
+            let res = await client12.api("https://graph.microsoft.com/beta/sites/" + userDomain + ":/sites/" + siteName + "?$select=id").get();
+            return res;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    getSPList: async (siteid) => {
+        try {
+            let res = await client13.api("https://graph.microsoft.com/beta/sites/" + siteid + "/lists?$select=id,name").get();
+            return res;
+        } catch (error) {
+            throw error;
+        }
     }
 
-    
+
 };
 
 
 const init = async () => {
-    
+
     const scopes = ["Group.ReadWrite.All"];
     const CacheLocation = "localStorage";
     const msalConfig = {
@@ -317,10 +438,10 @@ const init = async () => {
             authority: "https://login.microsoftonline.com/common"
         },
         cache: {
-            cacheLocation: CacheLocation            
+            cacheLocation: CacheLocation
         }
     };
-    
+
 
     var email = "";
     var teamIDs = [];
@@ -328,13 +449,12 @@ const init = async () => {
     const msalOptions = new MicrosoftGraph.MSALAuthenticationProviderOptions(scopes);
     const msalProvider = new MicrosoftGraph.ImplicitMSALAuthenticationProvider(msalApplication, msalOptions);
 
-    
+
 
     client = MicrosoftGraph.Client.initWithMiddleware({
         debugLogging: true,
         authProvider: msalProvider
-    });
-    console.log(client);
+    });    
     client1 = MicrosoftGraph.Client.initWithMiddleware({
         debugLogging: true,
         authProvider: msalProvider
@@ -375,6 +495,18 @@ const init = async () => {
         debugLogging: true,
         authProvider: msalProvider
     });
+    client11 = MicrosoftGraph.Client.initWithMiddleware({
+        debugLogging: true,
+        authProvider: msalProvider
+    });
+    client12 = MicrosoftGraph.Client.initWithMiddleware({
+        debugLogging: true,
+        authProvider: msalProvider
+    });
+    client13 = MicrosoftGraph.Client.initWithMiddleware({
+        debugLogging: true,
+        authProvider: msalProvider
+    });
 
     request
         .getUserDetails()
@@ -385,10 +517,12 @@ const init = async () => {
             $("#sContact").text(res.mobilePhone);
             email = res.mail;
             UserID = res.id;
+            userEmail = res.mail;
+            userDomain = userEmail.split('@')[1];
         })
         .catch((error) => {
             console.log(error);
-        }); 
+        });
 
     request
         .getTeamApps()
@@ -398,7 +532,7 @@ const init = async () => {
                 z = z.replace(/['"]+/g, '');
                 allCustomApps.push(res5.value[z].id);
             }
-        });    
+        });
 
     request
         .getTeamsReport()
@@ -413,52 +547,52 @@ const init = async () => {
 
     request
         .getJoinedTeams()
-        .then((res1) => {       
-            for (var i = 0; i < res1.value.length; i++) {        
-                var x = "'"+ i +"'";
+        .then((res1) => {
+            for (var i = 0; i < res1.value.length; i++) {
+                var x = "'" + i + "'";
                 x = x.replace(/['"]+/g, '');
-                teamIDs.push(res1.value[x].id + "|" +res1.value[x].displayName);                 
+                teamIDs.push(res1.value[x].id + "|" + res1.value[x].displayName);
             }
-            
-            meow();               
+
+            meow();
         })
         .catch((error) => {
             console.log(error);
-        });    
+        });
 
-    function meow() { 
+    function meow() {
         var sOwners = $("<select id='ddlOwnerTeams' multiple name='dTO' />");
-        var sMembers = $("<select id='ddlMemberTeams' multiple name='dTM' />");       
+        var sMembers = $("<select id='ddlMemberTeams' multiple name='dTM' />");
         for (var a = 0; a < teamIDs.length; a++) {
             $("#sTeams").text(teamIDs.length);
-            var teamID = [];            
+            var teamID = [];
             teamID = teamIDs[a].split('|');
             request
-                .getTeamsOwners(teamID[0], teamID[1])                
-                .then((res2) => {                       
-                    
-                        var isOwner = false;
+                .getTeamsOwners(teamID[0], teamID[1])
+                .then((res2) => {
 
-                        res2.value.forEach(function (val, i) {
+                    var isOwner = false;
 
-                            if (email.indexOf(res2.value[i].mail) > -1) {
-                                isOwner = true;
-                            }
-                        });
+                    res2.value.forEach(function (val, i) {
 
-                        if (isOwner === true) {
-                            $('<option />', { value: res2.tid, text: res2.tName }).appendTo(sOwners);                            
+                        if (email.indexOf(res2.value[i].mail) > -1) {
+                            isOwner = true;
                         }
-                        else {
-                            $('<option />', { value: res2.tid, text: res2.tName }).appendTo(sMembers);
-                        }                    
-                                                        
+                    });
+
+                    if (isOwner === true) {
+                        $('<option />', { value: res2.tid, text: res2.tName }).appendTo(sOwners);
+                    }
+                    else {
+                        $('<option />', { value: res2.tid, text: res2.tName }).appendTo(sMembers);
+                    }
+
                 });
-        }          
+        }
 
         sOwners.appendTo($("#dTOwners"));
-        sMembers.appendTo($("#dTMembers"));    
-      
+        sMembers.appendTo($("#dTMembers"));
+
     }
 
 
