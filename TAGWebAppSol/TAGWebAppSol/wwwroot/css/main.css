@@ -157,14 +157,14 @@ ul.tabs {
     border: 1px solid #c5bcbc;
 }
 
-#no-data {
+/*#no-data {
     font-size: larger;
     font-weight: 500;
     top: 1%;
     position: relative;
     left: 1%;
     padding: 0.5rem !important;
-}
+}*/
 
 #tab-1-inner {
     font-size: larger;
