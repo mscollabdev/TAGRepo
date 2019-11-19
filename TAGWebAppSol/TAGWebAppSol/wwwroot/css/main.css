@@ -221,3 +221,72 @@ ul.tabs {
 [tooltip]:not([tooltip-persistent]):after {
     pointer-events: none;
 }
+
+.card-container {
+    cursor: pointer;
+    height: 150px;
+    perspective: 600px;
+    margin: 5px;
+}
+
+.card {
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+    transition: all 1s ease-in-out;
+    width: 100%;
+}
+
+
+
+#card-1:hover {
+    transform: rotateY(180deg);
+}
+
+#card-2:hover {
+    transform: rotateY(180deg);
+}
+
+#card-3:hover {
+    transform: rotateY(180deg);
+}
+
+#card-4:hover {
+    transform: rotateY(180deg);
+}
+
+.card .side {
+    background: #eaeaed;
+    text-align: center;
+    color: #0087cc;
+    backface-visibility: hidden;
+    border-radius: 6px;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    text-align: center;
+}
+
+.card .back {
+    background: #eaeaed;
+    color: black;
+    text-align: center;
+    transform: rotateY(180deg);
+
+}
+
+
+.row {
+    width: 100%;
+}
+
+.col-sm-2 {
+    width: 22.666667% !important;
+}
+
+@media (min-width: 576px) {
+    .col-sm-3 {
+        max-width: 23% !important;
+    }
+}

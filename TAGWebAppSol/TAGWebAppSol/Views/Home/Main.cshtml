@@ -72,7 +72,7 @@
                         <label class="form-check-label">User</label>
                     </div>
                     <div class="form-check form-check-inline">
-                       <img id="imgFilter" src="~/images/filter.png" style="width: 15px;height: 15px; margin-inline-start: 75px" />
+                       <img id="imgFilter" src="~/images/filter.png" style="width: 15px;height: 15px; margin-inline-start: 50px" />
                     </div>
                 </fieldset>
                 <div>
@@ -109,7 +109,7 @@
                     </div>
                     <div id="dTUsers" style="display:none">
                         <br/>
-                        <input type="text" placeholder="Please enter user email address" id="txtUserSearch" style="width: 380px;border-radius: 0.5rem" />
+                        <input type="text" placeholder="Please enter user email address" id="txtUserSearch" style="width: 350px;border-radius: 0.5rem" />
                         <br /><br/>
                         <button id="searchUserbtn" type="button" class="btn btn-primary">Search User</button>
                     </div>
@@ -135,22 +135,77 @@
                         <div id="tab-1" class="tab-content current">
                             <div id="tab-1-inner" style="display:none">Multiple teams selected..!!</div>
                             <div id="tab-2-inner">
-                                <fieldset id="fieldset-TeamDetails" style="font-size:15px">
-                                    <p><b>Team Name : </b><span id="tName"></span></p>
-                                    <p><b>No. of Apps (OOTB) : </b><span id="tAppsOOTB"></span></p>
-                                    <p><b>No. of Apps Installed (Custom) : </b><span id="tAppsCustom"></span></p>
-                                    <p><b>No. of Channels : </b><span id="tChannels"></span></p>
-                                    <p>
-                                        <b>Most Active Channel : </b>
-                                        <span tooltip="This is calculated using channel last activity (chat history,file modifed and channel history)" id="tMActiveChannel">General <b>*</b></span>
-                                    </p>
-                                    <p>
-                                        <b>Least Active Channel : </b>
-                                        <span id="tLActiveChannel" tooltip="This is calculated using channel last activity (chat history,file modifed and channel history)">Temporary Channel <b>*</b></span>
-                                    </p>
-                                    <p><b>Last Activity Date (yyyy-mm-dd) : </b><span id="tLActiveChannel" tooltip="Report Refresh Date : 2019-11-16">Temporary Channel <b>*</b></span></p>
+                                @*<fieldset id="fieldset-TeamDetails" style="font-size:15px">
+            <p><b>Team Name : </b><span id="tName"></span></p>
+            <p><b>No. of Apps (OOTB) : </b><span id="tAppsOOTB"></span></p>
+            <p><b>No. of Apps Installed (Custom) : </b><span id="tAppsCustom"></span></p>
+            <p><b>No. of Channels : </b><span id="tChannels"></span></p>
+            <p>
+                <b>Most Active Channel : </b>
+                <span tooltip="This is calculated using channel last activity (chat history,file modifed and channel history)" id="tMActiveChannel">General <b>*</b></span>
+            </p>
+            <p>
+                <b>Least Active Channel : </b>
+                <span id="tLActiveChannel" tooltip="This is calculated using channel last activity (chat history,file modifed and channel history)">Temporary Channel <b>*</b></span>
+            </p>
+            <p><b>Last Activity Date (yyyy-mm-dd) : </b><span id="tLActiveChannel" tooltip="Report Refresh Date : 2019-11-16">Temporary Channel <b>*</b></span></p>
 
-                                </fieldset>
+        </fieldset>*@
+
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="card-container col-sm-3">
+                                            <div class="card" id="card-1">
+                                                <div class=" card side" style="width: 100%;">
+                                                    <h1 style="height: 60%;top: 15px;position: relative;font-size:3rem;color:black">6</h1>
+                                                    <h5 style="height: 40%;color:black">Channels</h5>
+                                                </div>
+                                                <div class="side back" style="line-height: 20px;">
+                                                    <p>Most Active Channel : <span><b>General</b></span></p><p>Least Active Channel: <span><b>Channel3</b></span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card-container col-sm-3">
+                                            <div class="card" id="card-2">
+                                                <div class=" card side" style="width: 100%;">
+                                                    <h1 style="height: 60%;top: 15px;position: relative;font-size:3rem;color:black">32</h1>
+                                                    <h5 style="height: 40%;color:black">Apps</h5>
+                                                </div>
+                                                <div class="side back" style="line-height: 33px;">
+                                                    <p>Apps (OOB) : <span><b>27</b></span></p><p>Apps (Custom) : <span><b>5</b></span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card-container col-sm-3">
+                                            <div class="card" id="card-3">
+                                                <div class=" card side" style="width: 100%;">
+                                                    <h1 style="height: 60%;top: 15px;position: relative;font-size:3rem;color:black">20</h1>
+                                                    <h5 style="height: 40%;color:black">Last Active (days)</h5>
+                                                </div>
+                                                <div class="side back" style="line-height: 33px;">
+                                                    <p>Report Refresh Date : <span><b>11/16/2019</b></span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card-container col-sm-3">
+                                            <div class="card" id="card-4">
+                                                <div class=" card side" style="width: 100%;">
+                                                    <h1 style="height: 60%;top: 15px;position: relative;font-size:3rem;color:black">200</h1>
+                                                    <h5 style="height: 40%;color:black">Total Storage (MB)</h5>
+                                                </div>
+                                                <div class="side back" style="line-height: 33px;">
+                                                    <p>SharePoint Files : <span><b>150 MB</b></span></p><p>Conversations: <span><b>50 MB</b></span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
                             </div>
 
                         </div>
