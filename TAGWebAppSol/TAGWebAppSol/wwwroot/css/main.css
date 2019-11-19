@@ -39,7 +39,7 @@
     width: 45%;
     position: absolute;
     /* top: 43%; */
-    margin-top: -34px;
+    margin-top: -45px;
     left: 24%;
 }
 
@@ -215,7 +215,8 @@ ul.tabs {
     background: black;
     margin-top: -10px;
     margin-left: 20px;
-    color: white
+    color: white;
+    z-index: 99 !important
 }
 
 [tooltip]:not([tooltip-persistent]):after {
@@ -289,4 +290,24 @@ ul.tabs {
     .col-sm-3 {
         max-width: 23% !important;
     }
+}
+
+.btn-primary {
+    width: fit-content;
+    margin-bottom: 2%;
+}
+
+.row-buttons {
+    width: 100%;
+    margin-left: 1.5%;
+    padding-top:7px;
+}
+
+.btnLbl {
+    margin-left: 2%;
+    float:left;
+}
+
+.btn2 {
+    margin-left: 5%;
 }

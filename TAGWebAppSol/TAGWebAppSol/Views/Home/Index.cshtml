@@ -14,14 +14,20 @@
     <script type="text/javascript" src="~/js/Teams.js"></script>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.3.1023/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.3.1023/styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.3.1023/styles/kendo.default.mobile.min.css" />
+    <script type="text/javascript" src="https://kendo.cdn.telerik.com/2019.3.1023/js/kendo.all.min.js"></script>
+    <script type="text/javascript" src="~/js/userTeams.js"></script>
+    <script type="text/javascript" src="~/js/request.js"></script>
     <link rel="stylesheet" type="text/css" href="~/css/main.css" />
 </head>
 
 <body style="background: #f3f3f3;">
     <div class="container">
-        <div class="row" style="background-image:url('/images/banner.png');height: 9rem; padding:3px; top:15%">
+        <div class="row" style="background: linear-gradient(to bottom, #734b6d, #42275a);height: 9rem; padding:3px; top:15%">
             <!--img src="~/images/banner.png" id="imgBanner" /-->
-            <img id="imgUserProfile" class="img-circle float-left img-responsive" src="/images/user.png">
+            <img id="imgUserProfile" class="img-circle float-left img-responsive" src="~/images/ProfilePic.jpg">
             <fieldset id="userInfo-fieldset">
                 <h3 id="uName" style="color:white"><span id="sName"></span></h3>
                 <h5 id="JTitle" style="color:white"><span id="sJob"></span></h5>
@@ -37,13 +43,13 @@
                 </h1>
                 <h5>Total Teams</h5>
             </div>
-            <div class="teamDetails" style="left: 69%;">
+            <div class="teamDetails" style="left: 70%;">
                 <h1 style="margin-bottom: 0.1rem;text-align: center;">
                     <span id="sTOwner"></span>
                 </h1>
                 <h5>As Owner</h5>
             </div>
-            <div class="teamDetails" style="left: 78%;">
+            <div class="teamDetails" style="left: 79%;">
                 <h1 style="margin-bottom: 0.1rem;text-align: center;">
                     <span id="sTMember"></span>
                 </h1>
@@ -51,7 +57,7 @@
             </div>
         </div>
 
-        <div class="row" style="background-image:url('/images/banner.png');height: 20.5rem; margin-top:8px">
+        <div class="row" style="background: linear-gradient(to bottom, #734b6d, #42275a);height: auto!important; margin-top:8px">
             <div class="col-sm-4" id="col-4">
                 <fieldset class="border p-3">
                     <legend class="w-auto">User Type:</legend>
@@ -63,50 +69,175 @@
                         <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
                         <label class="form-check-label">Member</label>
                     </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="3">
+                        <label class="form-check-label">User</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <img id="imgFilter" src="~/images/filter.png" style="width: 15px;height: 15px; margin-inline-start: 50px" />
+                    </div>
                 </fieldset>
                 <div>
                     <div id="dTOwners" style="margin:1px">
                     </div>
                     <div id="dTMembers" style="display:none">
                     </div>
+                    <div id="dTUsers" style="display:none">
+                        <br />
+                        <input type="text" placeholder="Please enter user email address" id="txtUserSearch" style="width: 350px;border-radius: 0.5rem" />
+                        <br /><br />
+                        <button id="searchUserbtn" type="button" class="btn btn-primary">Search User</button>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-7" id="col-7">
                 <div id="no-data">
-                    No Team(s) selected..!!
+                    <ul class="tabs" id="ulRequestTab">
+                        <li class="tab-link current" data-tab="tab-1" id="li-reqtab-1"><img src="~/images/request.png" style="vertical-align: middle;width: 30px;height: 25px;" /> My Requests</li>
+                    </ul>
+                    <div id="reqtab-1" class="tab-content current">
+                        <fieldset id="button-request" class="fieldset-button">
+                            <div id="tblRequest"></div>
+                        </fieldset>
+                    </div>
                 </div>
                 <div id="divTeamTabDetails" style="display:none">
                     <ul class="tabs">
                         <li class="tab-link current" data-tab="tab-1" id="li-tab-1"><img src="~/images/details.png" style="vertical-align: middle;width: 30px;height: 25px;" /> Details</li>
-                        <li class="tab-link" data-tab="tab-2" id="li-tab-2"><img src="~/images/action.png" style="vertical-align: middle;width: 30px;height: 25px;" />Bulk Action</li>
+                        <li class="tab-link" data-tab="tab-2" id="li-tab-2"><img src="~/images/action.png" style="vertical-align: middle;width: 30px;height: 25px;" /> Actions</li>
                     </ul>
                     <div id="tab-1" class="tab-content current">
                         <div id="tab-1-inner" style="display:none">Multiple teams selected..!!</div>
                         <div id="tab-2-inner">
-                            <fieldset id="fieldset-TeamDetails" style="font-size:15px">
-                                <p><b>Team Name : </b><span id="tName"></span></p>
-                                <p><b>Team URL : </b><span id="tLink"></span></p>
-                                <p><b>No. of Apps (OOTB) : </b><span id="tAppsOOTB"></span></p>
-                                <p><b>No. of Apps Installed (Custom) : </b><span id="tAppsCustom"></span></p>
-                                <p><b>No. of Channels : </b><span id="tChannels"></span></p>
-                                <p>
-                                    <b>Most Active Channel : </b>
-                                    <span tooltip="This is calculated using channel last activity (chat history,file modifed and channel history)" id="tMActiveChannel">General <b>*</b></span>
-                                </p>
-                                <p>
-                                    <b>Least Active Channel : </b>
-                                    <span id="tLActiveChannel" tooltip="This is calculated using channel last activity (chat history,file modifed and channel history)">Temporary Channel <b>*</b></span>
-                                </p>
-                                <p><b>Report Refresh Date (yyyy-mm-dd) : </b><span id="reportDate"></span></p>
-                                <p><b>Last Activity Date (yyyy-mm-dd) : </b><span id="tLastActivityDate"></span></p>
+                            @*<fieldset id="fieldset-TeamDetails" style="font-size:15px">
+                        <p><b>Team Name : </b><span id="tName"></span></p>
+                        <p><b>Team URL : </b><span id="tLink"></span></p>
+                        <p><b>No. of Apps (OOTB) : </b><span id="tAppsOOTB"></span></p>
+                        <p><b>No. of Apps Installed (Custom) : </b><span id="tAppsCustom"></span></p>
+                        <p><b>No. of Channels : </b><span id="tChannels"></span></p>
+                        <p>
+                            <b>Most Active Channel : </b>
+                            <span tooltip="This is calculated using channel last activity (chat history,file modifed and channel history)" id="tMActiveChannel">General <b>*</b></span>
+                        </p>
+                        <p>
+                            <b>Least Active Channel : </b>
+                            <span id="tLActiveChannel" tooltip="This is calculated using channel last activity (chat history,file modifed and channel history)">Temporary Channel <b>*</b></span>
+                        </p>
+                        <p><b>Report Refresh Date (yyyy-mm-dd) : </b><span id="reportDate"></span></p>
+                        <p><b>Last Activity Date (yyyy-mm-dd) : </b><span id="tLastActivityDate"></span></p>
 
-                            </fieldset>
+                    </fieldset>*@
+
+                            <div class="container-fluid">
+                                <div class="row-buttons" style="margin-left: 0.5%;">
+                                    <h5><u><a id="tDetails" href="#" style="color:black"></a></u></h5>
+                                </div>
+                                <div class="row">
+                                    <div class="card-container col-sm-3">
+                                        <div class="card" id="card-1">
+                                            <div class=" card side" style="width: 100%;">
+                                                <h1 style="height: 60%;top: 15px;position: relative;font-size:3rem;color:black">
+                                                    <span id="tChannels"></span>
+                                                </h1>
+                                                <h5 style="height: 40%;color:black">Channels</h5>
+                                            </div>
+                                            <div class="side back" style="padding-top:7px">
+                                                <h5><b>General</b></h5>
+                                                <span>(Most Active)</span>
+                                                <br/>
+                                                <br/>
+                                                <h5><b>Channel 3</b></h5>
+                                                <span>(Least Active)</span>                                               
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-container col-sm-3">
+                                        <div class="card" id="card-2">
+                                            <div class=" card side" style="width: 100%;">
+                                                <h1 style="height: 60%;top: 15px;position: relative;font-size:3rem;color:black"><span id="tApps"></span></h1>
+                                                <h5 style="height: 40%;color:black">Apps</h5>
+                                            </div>
+                                            <div class="side back" style="padding-top: 10px;">
+                                             <h4 style="margin-bottom: 0!important;"><b><span id="tAppsOOTB"></span></b></h4>
+                                             <span>(OOB)</span>
+                                                <br /><br />
+                                             <h4 style="margin-bottom: 0!important;"><b><span id="tAppsCustom"></span></b></h4>
+                                              <span>(Custom)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-container col-sm-3">
+                                        <div class="card" id="card-3">
+                                            <div class=" card side" style="width: 100%;">
+                                                <h1 style="height: 60%;top: 15px;position: relative;font-size:3rem;color:black">20</h1>
+                                                <h5 style="height: 40%;color:black">Last Active (days)</h5>
+                                            </div>
+                                            <div class="side back" style="padding-top: 40px;">
+
+                                                <h5>
+                                                    <span><b>11/16/2019</b></span>
+                                                </h5>
+                                                <span>(Report Refresh Date)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-container col-sm-3">
+                                        <div class="card" id="card-4">
+                                            <div class=" card side" style="width: 100%;">
+                                                <h1 style="height: 60%;top: 15px;position: relative;font-size:3rem;color:black">178</h1>
+                                                <h5 style="height: 40%;color:black">Total Storage (MB)</h5>
+                                            </div>
+                                            <div class="side back" style="padding-top: 15px;">
+
+                                                <h5 style="margin-bottom: 0!important;">
+                                                    <span>
+                                                        <b>150 MB</b>
+                                                    </span>
+                                                </h5>
+                                                <span>(SharePoint Files)</span>
+                                                <br/>
+                                                <br/>
+                                                <h5 style="margin-bottom: 0!important;">
+                                                    <span><b>28 MB</b></span>
+                                                </h5>
+                                                <span>(Conversations)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br/> 
+                                <fieldset class="border p-3">
+                                    <legend class="w-auto">Action:</legend>
+                                    <div class="row" style="padding-left: 12px">
+                                        <div class="row-buttons">
+                                            <b><label id="lblSyncFiles" style="float: left;">Sync all channel files to OneDrive: </label></b>
+                                            <button id="syncToOneDrive" type="button" style="float:right" class="btn btn-primary syncFiles">Sync OneDrive</button>
+                                        </div>
+                                        <div id="divArchive" class="row-buttons">
+                                            @*<button id="isArchive" type="button" class="btn btn-primary">Is Archive</button>*@
+                                            <b><label id="isArchive" style="float: left;">Is Archived: </label></b>
+                                            <label id="lblIsArchive" class="btnLbl"></label>
+                                            <button id="lblIsArchiveBtn" type="button" class="btn btn-primary btn2" style="float:right"></button>
+                                        </div>
+                                        <div id="divOrphan" class="row-buttons" style="display:none">
+                                            <b><label id="isOrphan" style="float: left;">Is Orphan: </label></b>
+                                            <label id="lblIsOrphan" class="btnLbl"></label>
+                                            <button id="lblIsOrphanBtn" type="button" class="btn btn-primary btn2" style="float:right">Request for Owner</button>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    <label id="lblDetailsMessage" style="color:green;display:none"></label>
+                                    </fieldset>
+</div>
                         </div>
                     </div>
                     <div id="tab-2" class="tab-content">
                         <fieldset id="button-owner" class="fieldset-button">
                             <button id="addUserbtn" type="button" class="btn btn-primary">Add User</button>
-                            <input type="text" width="350" id="txtUser" placeholder="Please enter user email id" style="width:300px;margin-left:20px" />
+                            <input type="text" width="350" id="txtUser" placeholder="Please enter user email id" style="width:300px;margin-left:38px" />
                             <label id="lblMessage" style="color : green"></label>
                             <br>
                             <br>
@@ -118,19 +249,27 @@
                                 </select>
                             </div>
                             <br>
-                            <button id="archivebtn" type="button" class="btn btn-primary syncFiles">Sync Files</button><br>
-                            <br>
-
-
+                            @*<button id="archivebtn" type="button" class="btn btn-primary syncFiles">Sync Files</button><br>
+                            <br>*@
                         </fieldset>
                         <fieldset id="button-member" class="fieldset-button" style="display:none">
                             <button id="leaveTeamsbtn" type="button" class="btn btn-primary">Leave Teams</button><br />
                             <label id="lblMessageMember" style="color : green"></label>
                             <br>
-                            <button id="archivebtn1" type="button" class="btn btn-primary syncFiles">Sync Files</button><br>
-                            <br>
+                            @*<button id="archivebtn1" type="button" class="btn btn-primary syncFiles">Sync Files</button><br>
+                            <br>*@
                         </fieldset>
 
+                    </div>
+                </div>
+                <div id="divUserDetails">
+                    <div id="tab-4" class="tab-content">
+                        <div><b>User Details :-</b><br /></div>
+                        <fieldset id="fieldset-UserDetails" style="font-size:15px">
+                            <div id="tblUserDetails"></div>
+                        </fieldset>
+                        <br />
+                        <button id="removebtn" type="button" class="btn btn-primary">Remove All</button>
                     </div>
                 </div>
             </div>

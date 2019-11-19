@@ -25,6 +25,21 @@ $(document).ready(function () {
     init();
     $("#ddlgroup").multiselect();
 
+    $('#ulRequestTab li').click(function () {
+        $('#reqtab-1').addClass('current');
+    });
+
+    $("#lblIsArchiveBtn").click(function () {
+        $("#lblDetailsMessage").show();
+        $("#lblDetailsMessage").text("Request raised succesfully! Please check Requests dashboard!");
+    });
+
+    $("#lblIsOrphanBtn").click(function () {
+        $("#lblDetailsMessage").show();
+        $("#lblDetailsMessage").text("Request raised succesfully! Please check Requests dashboard!");
+    });
+
+
     setTimeout(function () {
         $("#ddlOwnerTeams").multiselect({
             search: true,
@@ -41,6 +56,7 @@ $(document).ready(function () {
         $("[id*='opt']").click(function () {
             $("#lblMessage").hide();
             $("#lblMessageMember").hide();
+            $("#lblDetailsMessage").hide();
             $("#txtUser").val('');
             if ($("[id*='opt']:checked").length === 1) {
                 $("#divTeamTabDetails").show();
@@ -55,8 +71,19 @@ $(document).ready(function () {
                 request
                     .getTeamsDetails($("[id*='opt']:checked")['0'].value)
                     .then((res3) => {
-                        $("#tName").text(res3.displayName);
-                        $("#tLink").html("<a href=" + res3.webUrl + ">Link</a>");
+                        $("#tDetails").attr("href", res3.webUrl);
+                        $("#tDetails").text(res3.displayName);
+                        $("#lblIsArchive").text(res3.isArchived);
+                        if (res3.isArchived === "true") {
+                            $("#lblIsArchiveBtn").text("Restore Team");
+                            $("#lblIsArchive").attr("style", "color:darkgreen;text-transform: uppercase;font-weight:bold");
+                        }
+                        else {
+                            $("#lblIsArchiveBtn").text("Archive Team");
+                            $("#lblIsArchive").attr("style", "color:darkred;text-transform: uppercase;font-weight:bold");
+                        }
+                        //$("#tName").text(res3.displayName);
+                        //$("#tLink").html("<a href=" + res3.webUrl + ">Link</a>");
 
                     });
 
@@ -69,7 +96,16 @@ $(document).ready(function () {
                 request
                     .getTeamsOwners($("[id*='opt']:checked")['0'].value, "test")
                     .then((res4) => {
-                        $("#tOwners").text(res4.value.length);
+                        if (res4.value.length) {
+                            $("#lblIsOrphan").text("False").attr("style", "color:darkred;text-transform: uppercase;font-weight:bold");
+                            $("#lblIsOrphan").append("<span tooltip='This team has " + res4.value.length + " Owner(s)'><b>*</b></span>");
+                            $("#lblIsOrphanBtn").prop('disabled', true);
+                        }
+                        else {
+                            $("#lblIsOrphan").text("True").attr("style", "color:darkgreen;text-transform: uppercase;font-weight:bold");
+                            $("#lblIsOrphan").append("<span tooltip='This team has " + res4.value.length + " Owner(s). Please click Request for Owner button to raise a request for new team owner'><b>*</b></span>");
+                            $("#lblIsOrphanBtn").prop('disabled', false);
+                        }
                     });
 
                 request
@@ -84,37 +120,41 @@ $(document).ready(function () {
                                 }
                             }
                         }
+                        $("#tApps").text(res6.value.length);
                         $("#tAppsOOTB").text(res6.value.length - teamCustomApps.length);
                         $("#tAppsCustom").text(teamCustomApps.length);
                     });
+                       
 
                 request
                     .getGroupNickName($("[id*='opt']:checked")['0'].value)
-                    .then((res11) => {
-                        //siteURL = "https://" + userDomain + "/sites/" + res11.value['0'].mailNickname;
-                        siteName = res11.value['0'].mailNickname;
+                    .then((res11) => {                       
+                        siteName = res11.mailNickname;  
+                        request
+                            .getSiteWebID(userDomain, siteName)
+                            .then((res12) => {
+                                var siteDetails = res12.id;
+                                siteID = siteDetails.split(',')[1];
+                                webID = siteDetails.split(',')[2];
+
+                                request
+                                    .getSPList(siteID)
+                                    .then((res13) => {
+                                        for (var i = 0; i < res13.value.length; i++) {
+                                            var x = "'" + i + "'";
+                                            x = x.replace(/['"]+/g, '');
+                                            if (res13.value[x].name === "Shared Documents") {
+                                                listID = res13.value[x].id;
+                                            }
+                                        }
+                                    });
+                            });
                     });
 
-                request
-                    .getSiteWebID(userDomain, siteName)
-                    .then((res12) => {
-                        var siteDetails = res12.value['0'].id;
-                        siteID = siteDetails.split(',')[1];
-                        webID = siteDetails.split(',')[2];
-                    });
+               
 
 
-                request
-                    .getSiteWebID(siteID)
-                    .then((res13) => {
-                        for (var i = 0; i < res13.value.length; i++) {
-                            var x = "'" + i + "'";
-                            x = x.replace(/['"]+/g, '');
-                            if (res6.value[x].name === "Shared Documents") {
-                                listID = res6.value[x].id;
-                            }
-                        }
-                    });
+               
 
 
                 $.each(allGroupsReport, function (index, value) {
@@ -152,7 +192,7 @@ $(document).ready(function () {
 
         $(".ts-messages-header").css("display", "none");
 
-    }, 1000);
+    }, 2000);
 
     $('ul.tabs li').click(function () {
         var tab_id = $(this).attr('data-tab');       
@@ -201,21 +241,37 @@ $(document).ready(function () {
     $(".form-check-input").click(function () {
         $("#lblMessage").hide();
         $("#lblMessageMember").hide();
+        $("#lblDetailsMessage").hide();
         $("#txtUser").val('');
         $("[id *= 'opt']").prop("checked", false);
         /* $('.ms-options-wrap').find('> button:first-child').text('');*/
 
         $("#divTeamTabDetails").hide();
+        $("#divUserDetails").hide();
         $("#no-data").show();
 
 
         if ($(this).attr("value") === "1") {
             $("#dTOwners").show();
             $("#dTMembers").hide();
+            $("#dTUsers").hide();
+            $("#divArchive").show();
+            $("#divOrphan").hide();      
         }
         else if ($(this).attr("value") === "2") {
             $("#dTMembers").show();
             $("#dTOwners").hide();
+            $("#dTUsers").hide();
+            $("#divArchive").hide();
+            $("#divOrphan").show();
+        }
+        else if ($(this).attr("value") === "3") {
+            $("#no-data").hide();
+            $("#dTMembers").hide();
+            $("#dTOwners").hide();
+            $("#divArchive").hide();
+            $("#divOrphan").hide();
+            $("#dTUsers").show();
         }
     });
 
@@ -247,7 +303,7 @@ $(document).ready(function () {
             var groupId = $(this).val();
             request.
                 removeUser(UserID, groupId)
-                .then((res11) => {
+                .then((res18) => {
                     $("#lblMessageMember").text("User removed successfully! Please click 'Load Teams' again.");
                 })
                 .catch((error) => {
@@ -259,9 +315,83 @@ $(document).ready(function () {
 
     $(".syncFiles").click(function () {
         window.open(
-            "odopen://sync/?siteId=" + siteID + "&amp;webId=" + webID + "&amp;listId=" + listID + "&amp;userEmail=" + userEmail + "&amp;webUrl=+%3A%2F%2F" + userDomain + "/sites/" + siteName,
+            "odopen://sync/?siteId=" + siteID + "&amp;webId=" + webID + "&amp;listId=" + listID + "&amp;userEmail=" + userEmail + "&amp;webUrl=https://" + userDomain + "/sites/" + siteName,
             "_blank" 
         );
+    });
+
+    $("#tblUserDetails").kendoGrid({
+        dataSource: {
+            data: userTeams,
+            schema: {
+                model: {
+                    fields: {
+                        TeamName: { type: "string" },
+                        UserType: { type: "string" }
+                    }
+                }
+            },
+            pageSize: 10
+        },
+        height: 300,
+        scrollable: true,
+        sortable: true,
+        filterable: true,
+        pageable: {
+            input: true,
+            numeric: false
+        },
+        columns: [
+            { field: "TeamName", title: "Team Name", width: "250px" },
+            { field: "UserType", title: "User Type", width: "150px" },
+            { command: ["destroy"], title: "&nbsp;", width: "100px" }
+        ],
+        editable: "inline"
+    });
+
+    $("#tblRequest").kendoGrid({
+        dataSource: {
+            data: userRequests,
+            schema: {
+                model: {
+                    fields: {
+                        TeamName: { type: "string" },
+                        RequestType: { type: "string" },
+                        DateRaised: { type: "string" },
+                        Status: { type: "string" }
+                    }
+                }
+            },
+            pageSize: 10
+        },
+        height: 300,
+        scrollable: true,
+        sortable: true,
+        filterable: true,
+        pageable: {
+            input: true,
+            numeric: false
+        },
+        columns: [
+            { field: "TeamName", title: "Team Name", width: "120px" },
+            { field: "RequestType", title: "Request Type", width: "100px" },
+            { field: "DateRaised", title: "Request Date", width: "100px" },
+            { field: "Status", title: "Status", width: "100px" },
+            {
+                command: [{ name: "Details" }], title: "&nbsp;", width: "80px"
+            }],
+        editable: "inline"
+    });
+
+    $('#searchUserbtn').click(function () {
+        $("#no-data").hide();
+        $("#lblMessage").hide();
+        $("#lblMessageMember").hide();
+        $("#divTeamTabDetails").hide();
+        $("#divUserDetails").show();
+        $("#tab-1").removeClass('current');
+        $("#tab-2").removeClass('current');
+        $("#tab-4").addClass('current');
     });
 
 
@@ -285,6 +415,7 @@ let client10;
 let client11;
 let client12;
 let client13;
+
 
 let request = {
     getUserDetails: async () => {
@@ -399,8 +530,8 @@ let request = {
 
     getGroupNickName: async (tID) => {
         try {
-            let res = await client11.api("https://graph.microsoft.com/beta/groups/" + tID + "?$select=mailNickname").get();
-            return res;
+            let resp = await client11.api("https://graph.microsoft.com/beta/groups/" + tID + "?$select=mailNickname").get();
+            return resp;
         } catch(error) {
             throw error;
         }
@@ -507,10 +638,15 @@ const init = async () => {
         debugLogging: true,
         authProvider: msalProvider
     });
+    client14 = MicrosoftGraph.Client.initWithMiddleware({
+        debugLogging: true,
+        authProvider: msalProvider
+    });
 
     request
         .getUserDetails()
         .then((res) => {
+
             $("#sName").text(res.displayName);
             $("#sEmail").text(res.mail);
             $("#sJob").text(res.jobTitle);
@@ -519,6 +655,7 @@ const init = async () => {
             UserID = res.id;
             userEmail = res.mail;
             userDomain = userEmail.split('@')[1];
+            userDomain = userDomain.replace("onmicrosoft", "sharepoint");
         })
         .catch((error) => {
             console.log(error);

@@ -159,7 +159,7 @@
                     }
                     maxHeight = maxHeight < instance.options.minHeight ? instance.options.minHeight : maxHeight;
 
-                    optionsWrap.css('maxHeight', 160);
+                    optionsWrap.css('maxHeight', 265);
                 }
             }).click(function (event) { event.preventDefault(); });
 

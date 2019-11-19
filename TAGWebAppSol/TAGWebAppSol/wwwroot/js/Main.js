@@ -83,7 +83,6 @@
         $("#lblMessageMember").text("User removed successfully! Please click 'Load Teams' again.");
     });
 
-
     $(".form-check-input").click(function () {
         $("#lblMessage").hide();
         $("#lblMessageMember").hide();
