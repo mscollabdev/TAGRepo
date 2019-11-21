@@ -159,7 +159,7 @@
                     }
                     maxHeight = maxHeight < instance.options.minHeight ? instance.options.minHeight : maxHeight;
 
-                    optionsWrap.css('maxHeight', 265);
+                    optionsWrap.css('maxHeight', 295);
                 }
             }).click(function (event) { event.preventDefault(); });
 
@@ -335,9 +335,11 @@
                 var select = optionsWrap.parent().prev();
 
                 // toggle clicked option
-                select.find('option[value="' + $(this).val() + '"]').prop(
-                    'selected', $(this).is(':checked')
-                ).closest('select').trigger('change');
+                //select.find('option[value="' + $(this).val() + '"]').prop(
+                //    'selected', $(this).is(':checked')
+                //).closest('select').trigger('change');
+
+                select.find('option[value="' + $(this).val() + '"]').attr("selected", "selected");
 
                 if (typeof instance.options.onOptionClick == 'function') {
                     instance.options.onOptionClick(instance.element, this);

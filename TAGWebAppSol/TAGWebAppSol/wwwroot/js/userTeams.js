@@ -1,17 +1,17 @@
 ﻿var userTeams = [{
-    TeamName: "Demo Team 1",
+    TeamName: "Oltiva IT",
     UserType: "Owner"
 
 }, {
-        TeamName: "Demo Team 3",
+        TeamName: "Oltiva & Design",
         UserType: "Member"
 }, {
-        TeamName: "Demo Team 5",
+        TeamName: "Oltiva - The Biofore Company",
         UserType: "Member"
 }, {
-        TeamName: "Demo Team 7",
+        TeamName: "Oltiva Customer Online",
         UserType: "Member"
 }, {
-        TeamName: "Demo Team 9",
+        TeamName: "Oltiva Energy",
         UserType: "Owner"
 }];

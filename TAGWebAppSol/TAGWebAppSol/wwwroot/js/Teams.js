@@ -25,9 +25,9 @@ $(document).ready(function () {
     init();
     $("#ddlgroup").multiselect();
 
-    $('#ulRequestTab li').click(function () {
-        $('#reqtab-1').addClass('current');
-    });
+    //$('#ulRequestTab li').click(function () {
+    //    $('#reqtab-1').addClass('current');
+    //});
 
     $("#lblIsArchiveBtn").click(function () {
         $("#lblDetailsMessage").show();
@@ -58,11 +58,14 @@ $(document).ready(function () {
             $("#lblMessageMember").hide();
             $("#lblDetailsMessage").hide();
             $("#txtUser").val('');
+            
             if ($("[id*='opt']:checked").length === 1) {
                 $("#divTeamTabDetails").show();
                 $("#no-data").hide();
                 $('#li-tab-2').removeClass('current');
+                $('#li-tab-3').removeClass('current');
                 $("#tab-2").removeClass('current');
+                $("#tab-3").removeClass('current');
                 $('#li-tab-1').addClass('current');
                 $("#tab-1").addClass('current');
                 $("#tab-2-inner").show();
@@ -73,14 +76,16 @@ $(document).ready(function () {
                     .then((res3) => {
                         $("#tDetails").attr("href", res3.webUrl);
                         $("#tDetails").text(res3.displayName);
-                        $("#lblIsArchive").text(res3.isArchived);
-                        if (res3.isArchived === "true") {
+                       
+                        if (res3.isArchived === true) {
+                            $("#lblIsArchive").text("Yes");
                             $("#lblIsArchiveBtn").text("Restore Team");
-                            $("#lblIsArchive").attr("style", "color:darkgreen;text-transform: uppercase;font-weight:bold");
+                            $("#lblIsArchive").attr("style", "color:darkgreen;font-weight:bold");
                         }
                         else {
+                            $("#lblIsArchive").text("No");
                             $("#lblIsArchiveBtn").text("Archive Team");
-                            $("#lblIsArchive").attr("style", "color:darkred;text-transform: uppercase;font-weight:bold");
+                            $("#lblIsArchive").attr("style", "color:darkred;font-weight:bold");
                         }
                         //$("#tName").text(res3.displayName);
                         //$("#tLink").html("<a href=" + res3.webUrl + ">Link</a>");
@@ -97,14 +102,16 @@ $(document).ready(function () {
                     .getTeamsOwners($("[id*='opt']:checked")['0'].value, "test")
                     .then((res4) => {
                         if (res4.value.length) {
-                            $("#lblIsOrphan").text("False").attr("style", "color:darkred;text-transform: uppercase;font-weight:bold");
+                            $("#lblIsOrphan").text("No").attr("style", "color:darkred;font-weight:bold");
                             $("#lblIsOrphan").append("<span tooltip='This team has " + res4.value.length + " Owner(s)'><b>*</b></span>");
                             $("#lblIsOrphanBtn").prop('disabled', true);
+                            $("#lblIsOrphanBtn").attr('style', "cursor:not-allowed;float:right");
                         }
                         else {
-                            $("#lblIsOrphan").text("True").attr("style", "color:darkgreen;text-transform: uppercase;font-weight:bold");
+                            $("#lblIsOrphan").text("Yes").attr("style", "color:darkgreen;font-weight:bold");
                             $("#lblIsOrphan").append("<span tooltip='This team has " + res4.value.length + " Owner(s). Please click Request for Owner button to raise a request for new team owner'><b>*</b></span>");
                             $("#lblIsOrphanBtn").prop('disabled', false);
+                            $("#lblIsOrphanBtn").attr('style', "cursor:default;float:right");
                         }
                     });
 
@@ -179,10 +186,13 @@ $(document).ready(function () {
                     $('#button-member').show();
                 }
                 $("#no-data").hide();
+                $("#no-user").hide();
                 $('#li-tab-2').addClass('current');
                 $("#tab-2").addClass('current');
                 $('#li-tab-1').removeClass('current');
                 $("#tab-1").removeClass('current');
+                $('#li-tab-3').removeClass('current');
+                $("#tab-3").removeClass('current');
             }
         });
 
@@ -211,6 +221,7 @@ $(document).ready(function () {
                 $('#tab-1-inner').hide();
                 $('#tab-2-inner').show();
                 $("#no-data").hide();
+                $("#no-user").hide();
             }
             else if ($("[id*='opt']:checked").length === 0) {
                 $("#divTeamTabDetails").hide();
@@ -223,6 +234,7 @@ $(document).ready(function () {
                 $('#tab-1-inner').show();
                 $('#tab-2-inner').hide();
                 $("#no-data").hide();
+                $("#no-user").hide();
             }
         }
         else if (tab_id === "tab-2") {
@@ -245,13 +257,17 @@ $(document).ready(function () {
         $("#txtUser").val('');
         $("[id *= 'opt']").prop("checked", false);
         /* $('.ms-options-wrap').find('> button:first-child').text('');*/
-
+        $(".ms-options-wrap button").text("Select options");
+        $(".ms-options ul li").removeClass("selected");
+        $('#ddlOwnerTeams :selected').removeAttr('selected');
+        $('#ddlMemberTeams :selected').removeAttr('selected');
         $("#divTeamTabDetails").hide();
-        $("#divUserDetails").hide();
+        
         $("#no-data").show();
 
 
         if ($(this).attr("value") === "1") {
+            $("#divUserDetails").hide();
             $("#dTOwners").show();
             $("#dTMembers").hide();
             $("#dTUsers").hide();
@@ -259,6 +275,7 @@ $(document).ready(function () {
             $("#divOrphan").hide();      
         }
         else if ($(this).attr("value") === "2") {
+            $("#divUserDetails").hide();
             $("#dTMembers").show();
             $("#dTOwners").hide();
             $("#dTUsers").hide();
@@ -266,7 +283,10 @@ $(document).ready(function () {
             $("#divOrphan").show();
         }
         else if ($(this).attr("value") === "3") {
+            $("#divUserDetails").show();
             $("#no-data").hide();
+            $("#no-user").show();
+            $("#tab-4").hide();
             $("#dTMembers").hide();
             $("#dTOwners").hide();
             $("#divArchive").hide();
@@ -304,7 +324,7 @@ $(document).ready(function () {
             request.
                 removeUser(UserID, groupId)
                 .then((res18) => {
-                    $("#lblMessageMember").text("User removed successfully! Please click 'Load Teams' again.");
+                    $("#lblMessageMember").text("User removed successfully! Please refresh the page.");
                 })
                 .catch((error) => {
                     $("#lblMessageMember").text(error);
@@ -342,9 +362,9 @@ $(document).ready(function () {
             numeric: false
         },
         columns: [
-            { field: "TeamName", title: "Team Name", width: "250px" },
-            { field: "UserType", title: "User Type", width: "150px" },
-            { command: ["destroy"], title: "&nbsp;", width: "100px" }
+            { field: "TeamName", title: "Team Name", width: "60px" },
+            { field: "UserType", title: "User Type", width: "60px" },
+            { command: ["destroy"], title: "&nbsp;", width: "30px" }
         ],
         editable: "inline"
     });
@@ -364,7 +384,7 @@ $(document).ready(function () {
             },
             pageSize: 10
         },
-        height: 300,
+        height: 307,
         scrollable: true,
         sortable: true,
         filterable: true,
@@ -373,9 +393,9 @@ $(document).ready(function () {
             numeric: false
         },
         columns: [
-            { field: "TeamName", title: "Team Name", width: "120px" },
-            { field: "RequestType", title: "Request Type", width: "100px" },
-            { field: "DateRaised", title: "Request Date", width: "100px" },
+            { field: "TeamName", title: "Team", width: "120px" },
+            { field: "RequestType", title: "Request", width: "120px" },
+            { field: "DateRaised", title: "Date", width: "100px" },
             { field: "Status", title: "Status", width: "100px" },
             {
                 command: [{ name: "Details" }], title: "&nbsp;", width: "80px"
@@ -384,11 +404,13 @@ $(document).ready(function () {
     });
 
     $('#searchUserbtn').click(function () {
+        $("#divUserDetails").show();
         $("#no-data").hide();
+        $("#no-user").hide();
         $("#lblMessage").hide();
         $("#lblMessageMember").hide();
-        $("#divTeamTabDetails").hide();
-        $("#divUserDetails").show();
+        $("#divTeamTabDetails").hide();   
+        $("#tab-4").show();
         $("#tab-1").removeClass('current');
         $("#tab-2").removeClass('current');
         $("#tab-4").addClass('current');
@@ -510,7 +532,8 @@ let request = {
     addUser: async (tID) => {
         try {
             var directoryObject = {};
-            directoryObject["@odata.id"] = "https://graph.microsoft.com/beta/directoryObjects/9fd6a31b-5490-42cb-a669-57b1530b5771";
+            //directoryObject["@odata.id"] = "https://graph.microsoft.com/beta/directoryObjects/9fd6a31b-5490-42cb-a669-57b1530b5771"; demo user
+            directoryObject["@odata.id"] = "https://graph.microsoft.com/beta/directoryObjects/c54dd511-bf4f-4400-8977-916e2bec9ad4"; //niranjan
             let res = await client9.api("https://graph.microsoft.com/beta/groups/" + tID + "/members/$ref").post(directoryObject);
             return res;
         }

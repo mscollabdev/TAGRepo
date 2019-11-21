@@ -60,12 +60,13 @@
 
 .teamDetails {
     position: absolute;
-    top: 8%;
+    top: 5%;
     color: white;
 }
 
 #uContacts {
     font-size: smaller;
+    line-height: 1.7;
 }
 
 .radio-button-container {
@@ -116,6 +117,27 @@ legend.w-auto {
         border-color: #73499c;
     }
 
+.btn-primary {
+    width: fit-content;
+    margin-bottom: 2%;
+    color: #fff;
+    background-color: #565A96 !important;
+    border-color: #565A96 !important;
+}
+
+    .btn-primary:hover {
+        color: #fff;
+        background-color: #6264A7 !important;
+    }
+
+.btn:active {
+    outline: none;
+    border: none;
+}
+
+.btn:focus {
+    outline: 0;
+}
 
 ul.tabs {
     margin: 0px;
@@ -134,12 +156,14 @@ ul.tabs {
         ul.tabs li.current {
             background: #ffffff;
             color: #222;
+            border-bottom: 3px solid #73499c;
         }
 
 .tab-content {
     display: none;
     background: white;
     padding: 8px;
+    height: 347px;
 }
 
 #col-4 {
@@ -157,27 +181,49 @@ ul.tabs {
     border: 1px solid #c5bcbc;
 }
 
-/*#no-data {
+#no-data {
+    border: 1px solid #b1b7bd !important;
     font-size: larger;
     font-weight: 500;
     top: 1%;
     position: relative;
     left: 1%;
-    padding: 0.5rem !important;
-}*/
+    padding: 1rem !important;
+    margin: 13px 10px 0px 0px !important;
+    border-radius: 0.3rem;
+    height: 404px;
+}
+
+#no-user {
+    border: 1px solid #b1b7bd !important;
+    font-size: larger;
+    font-weight: 500;
+    top: 1%;
+    position: relative;
+    left: 1%;
+    padding: 1rem !important;
+    margin: 13px 10px 0px 0px !important;
+    border-radius: 0.3rem;
+    height: 404px;
+}
 
 #tab-1-inner {
     font-size: larger;
     font-weight: 500;
-    top: 1%;
-    position: relative;
-    left: 1%;
-    padding: 0.5rem !important;
+    padding-top: 8px;
+    padding-left: 13px;
+    border: 1px solid #b1b7bd;
+    border-radius: 0.3rem;
+    height: 317px;
+    margin: 10px;
 }
 
 #divTeamTabDetails {
     padding: 0.5rem !important;
     border-radius: 0.5rem !important;
+    margin: 13px 0px 0px 0px !important;
+    border: 1px solid #b1b7bd !important;
+    height: 413px !important;
 }
 
 .tab-content.current {
@@ -187,12 +233,21 @@ ul.tabs {
 .fieldset-button {
     border: 1px solid #b1b7bd;
     border-radius: 0.3rem;
-    padding: 5px
+    height: 332px;
+    padding: 15px;
 }
 
 #tab-2 {
     padding-top: 8px;
     padding-left: 13px;
+}
+
+#tab-4 {
+    border: 1px solid #b1b7bd !important;
+    padding: 1rem !important;
+    margin: 13px 0px 0px 0px !important;
+    border-radius: 0.3rem;
+    height: 404px;
 }
 
 [tooltip]:after {
@@ -260,6 +315,7 @@ ul.tabs {
     background: #eaeaed;
     text-align: center;
     color: #0087cc;
+    border-color: #626569;
     backface-visibility: hidden;
     border-radius: 6px;
     height: 100%;
@@ -274,7 +330,7 @@ ul.tabs {
     color: black;
     text-align: center;
     transform: rotateY(180deg);
-
+    border: solid 0.5px #626569;
 }
 
 
@@ -292,16 +348,11 @@ ul.tabs {
     }
 }
 
-.btn-primary {
-    width: fit-content;
-    margin-bottom: 2%;
-}
 
-.row-buttons {
-    width: 100%;
-    margin-left: 1.5%;
-    padding-top:7px;
-}
+    .row-buttons {
+        width: 100%;
+        margin-left: 1.5%;
+    }
 
 .btnLbl {
     margin-left: 2%;
@@ -310,4 +361,30 @@ ul.tabs {
 
 .btn2 {
     margin-left: 5%;
+    width:31% !important;
+}
+
+.k-grid td {
+    padding: .1em .4em !important;
+}
+
+.k-pager-wrap.k-pager-lg, .k-pager-wrap.k-pager-md, .k-pager-wrap.k-pager-sm {
+    padding-left: 20%;
+}
+
+.k-grid tbody .k-button {
+    background-color: #565A96 !important;
+    border-color: #565A96 !important;
+    color: #fff;
+}
+    .k-filter-menu .k-action-buttons .k-button {
+    background-color: #565A96 !important;
+    border-color: #565A96 !important;
+    color: #fff;
+}
+
+.k-primary {
+    background-color: #565A96 !important;
+    border-color: #565A96 !important;
+    color: #fff;
 }

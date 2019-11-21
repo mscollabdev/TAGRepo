@@ -1,26 +1,26 @@
 ﻿var userRequests = [{
-    TeamName: "Demo Team 1",
+    TeamName: "Oltiva IT",
     RequestType: "Archival",
     DateRaised: "11/18/2019",
     Status: "Not Started"
 
 }, {
-        TeamName: "Demo Team 5",
+        TeamName: "Oltiva Sourcing",
         RequestType: "Archival",
         DateRaised: "10/15/2019",
         Status: "In Progress"
 }, {
-        TeamName: "Demo Team 6",
+        TeamName: "Oltiva Internet",
         RequestType: "Others",
         DateRaised: "10/28/2019",
         Status: "In Progress"
 }, {
-        TeamName: "Demo Team 8",
+        TeamName: "Oltiva Workspace",
         RequestType: "Others",
         DateRaised: "11/15/2019",
         Status: "Not Started"
 }, {
-        TeamName: "Demo Team 9",
+        TeamName: "Oltiva Energy",
         RequestType: "Orphaned",
         DateRaised: "09/24/2019",
         Status: "Completed"
